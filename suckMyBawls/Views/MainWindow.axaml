@@ -1,0 +1,361 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:suckMyBawls.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="880"
+        x:Class="suckMyBawls.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+		Width="1555"
+		Height="880"
+        Title="suckMyBawls">
+	<Window.DataContext>
+		<vm:MainWindowViewModel />
+	</Window.DataContext>
+	
+		<Window.Styles>
+			
+			<Style Selector="TextBlock">
+				<Setter Property="Foreground" Value="Black"/>
+				<Setter Property="FontWeight" Value="Bold"></Setter>
+				<Setter Property="FontSize" Value="20"></Setter>
+			</Style>
+			<Style Selector="Button">
+				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="CornerRadius" Value="30"/>
+				<Setter Property="Padding" Value="15, 15"/>
+				<!--<Setter Property="Width" Value="224"></Setter>
+								<Setter Property="Height" Value="192"></Setter>-->
+				<Setter Property="Margin" Value="30, 0"></Setter>
+				<!--<Setter Property="RenderTransform" Value="scale(1.1)"/>-->
+			</Style>
+			<Style Selector="Button:pointerover /template/ ContentPresenter">
+				<Setter Property="Background" Value="#D9D9D9"/>
+			</Style>
+
+		</Window.Styles>
+
+	<!--Main Grid-->
+	<Grid Name="MainGrid" ColumnDefinitions="Auto, *">
+
+		<!--Todo-->
+		<Rectangle Grid.Column="0" Fill="#D9D9D9" Width="390"> </Rectangle>
+
+		<!--Orders-->
+		<Grid Grid.Column="0" RowDefinitions="Auto,Auto,*">
+			
+			<Label Grid.Row="0" Height="77"
+				   FontStyle="Italic"
+				   Foreground="White"
+				   FontWeight="Normal"
+				   FontSize="55"
+				   Margin="0,40,0,0">In process:</Label>
+
+			<Label Grid.Row="1" Height="45"
+				   FontStyle="Normal"
+				   Foreground="White"
+				   FontWeight="SemiLight"
+				   FontSize="25"
+				   Margin="15,-10,0,0">Hover to see current state</Label>
+			<Grid Grid.Row="2">
+				<ScrollViewer>
+					<ItemsControl ItemsSource="{Binding Recipes}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border BorderBrush="Gray" BorderThickness="1" Margin="0 10 0 10" Padding="10">
+									<StackPanel Orientation="Vertical" Spacing="5">
+										<TextBlock Text="{Binding Name}" FontSize="24" Foreground="Black" />
+										<TextBlock Text="{Binding Difficulty}" FontSize="16" Foreground="DarkGray" />
+										<ItemsControl ItemsSource="{Binding Steps}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Description}" FontSize="14" />
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+
+			</Grid>
+		
+		<!--Progress bars-->
+			<Grid Grid.Row="2">
+				<StackPanel Margin="20">
+					<ProgressBar Minimum="0"
+								 Maximum="100"
+								 Height="26"
+								 Value="{Binding ProgressValue}" />
+
+					<Button Command="{Binding StartProgressCommand}" Content="Cargar"
+							Margin="0,10,0,0"/>
+				</StackPanel>
+			</Grid>
+		</Grid>
+		<!--Titulo y Menu-->
+		<Grid Grid.Column="1" RowDefinitions="Auto, *">
+			<Grid Grid.Row="0" Background="White" Height="50">
+				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					<Label FontWeight="Bold" Foreground="black" FontSize="34" FontStyle="Normal">PLACE THE ORDER HERE</Label>
+				</StackPanel>
+			</Grid>
+
+			<!--Menu-->
+			<Grid Grid.Row="1" Background="White" ColumnDefinitions="*, *">
+				<Grid Grid.Column="0" Background="white" RowDefinitions="Auto,*, *, *, *">
+
+					<!--Columnas de Menu-->
+						<Grid Grid.Row="0" Background="White" Height="40"/>
+						<Grid Grid.Row="1">
+
+							<!-- Plato 1 -->
+							<Button Name="PizzaButton" Tag="PizzaPopup" Click="OnDishClick">
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<Border CornerRadius="30" ClipToBounds="True">
+										<Image Source="/Assets/PIZZA-MARGHERITA.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+									</Border>
+									<StackPanel>
+										<TextBlock Text="Pizza Margherita"/>
+										<TextBlock Text="Salsa de tomate, mozzarella y albahaca." FontSize="16" Foreground="Gray" TextWrapping="Wrap"/>
+									</StackPanel>
+								</StackPanel>
+							</Button>
+
+							<Popup Name="PizzaPopup" PlacementMode="Bottom" IsLightDismissEnabled="True">
+								<Border Name="PizzaPopupBorder" Background="#F2F2F2" Width="500" Height="150"
+										BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+										RenderTransformOrigin="0.5,0">
+									<Border.RenderTransform>
+										<TranslateTransform Y="-100"/>
+									</Border.RenderTransform>
+									<Grid>
+										<TextBlock Text="Más info de la pizza aquí" Margin="0,0,0,40"/>
+										<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+									</Grid>
+								</Border>
+							</Popup>
+
+
+
+						</Grid>
+					
+						<Grid Grid.Row="2">
+
+
+							<!-- Plato 2 -->
+							<Button Name="CurryButton" Tag="CurryPopup" Click="OnDishClick">
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<Border CornerRadius="30" ClipToBounds="True">
+										<Image Source="/Assets/beef.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+									</Border>
+									<StackPanel>
+										<TextBlock Text="Lamb Curry"/>
+										<TextBlock Text="Curry especiado con cordero tierno." FontSize="16" Foreground="Gray" TextWrapping="Wrap"/>
+									</StackPanel>
+								</StackPanel>
+							</Button>
+
+							<Popup Name="CurryPopup" PlacementMode="Bottom" IsLightDismissEnabled="True">
+								<Border Name="CurryPopupBorder" Background="#F2F2F2" Width="500" Height="150"
+										BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+										RenderTransformOrigin="0.5,0">
+									<Border.RenderTransform>
+										<TranslateTransform Y="-100"/>
+									</Border.RenderTransform>
+									<Grid>
+										<TextBlock Text="Más info del curry aquí" Margin="0,0,0,40"/>
+										<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+									</Grid>
+								</Border>
+							</Popup>
+							
+						</Grid>
+						<Grid Grid.Row="3">
+
+							<!-- Plato 3 -->
+							<Button Name="ChickenButton" Tag="ChickenPopup" Click="OnDishClick">
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<Border CornerRadius="30" ClipToBounds="True">
+										<Image Source="/Assets/garlic.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+									</Border>
+									<StackPanel>
+										<TextBlock Text="Grilled Chicken with Garlic Butter"/>
+										<TextBlock Text="Tierno pollo salteado con ajo y jengibre." FontSize="16" Foreground="Gray" TextWrapping="Wrap"/>
+									</StackPanel>
+								</StackPanel>
+							</Button>
+
+							<Popup Name="ChickenPopup" PlacementMode="Bottom" IsLightDismissEnabled="True">
+								<Border Name="ChickenPopupBorder" Background="#F2F2F2" Width="500" Height="150"
+													BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+													RenderTransformOrigin="0.5,0">
+									<Border.RenderTransform>
+										<TranslateTransform Y="-100"/>
+									</Border.RenderTransform>
+									<Grid>
+										<TextBlock Text="Más info de la paella aquí" Margin="0,0,0,40"/>
+										<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+									</Grid>
+								</Border>
+							</Popup>
+							
+						</Grid>
+						<Grid Grid.Row="4">
+
+							<!-- Plato 4 -->
+							<Button Name="PaellaButton" Tag="Plato4Popup" Click="OnDishClick">
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<Border CornerRadius="30" ClipToBounds="True">
+										<Image Source="/Assets/paella.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+									</Border>
+									<StackPanel>
+										<TextBlock Text="Seafood Paella"/>
+										<TextBlock Text="Arroz con mariscos al estilo valenciano." FontSize="16" Foreground="Gray" TextWrapping="Wrap"/>
+									</StackPanel>
+								</StackPanel>
+							</Button>
+
+							<Popup Name="Plato4Popup" PlacementMode="Top" IsLightDismissEnabled="True">
+								<Border Name="Plato4PopupBorder" Background="#F2F2F2" Width="500" Height="150"
+										BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+										RenderTransformOrigin="0.5,0">
+									<Border.RenderTransform>
+										<TranslateTransform Y="100"/>
+									</Border.RenderTransform>
+									<Grid>
+										<TextBlock Text="Más info del Garlic Chicken aquí" Margin="0,0,0,40"/>
+										<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+									</Grid>
+								</Border>
+							</Popup>
+
+
+						</Grid>
+				</Grid>
+				<Grid Grid.Column="1" Background="White" RowDefinitions="Auto,*,*,*,*">
+
+					<Grid Grid.Row="0" Background="White" Height="40"/>
+
+					<Grid Grid.Row="1">
+						<Button Command="{Binding StartProgressCommand}">
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+								<Border CornerRadius="30" ClipToBounds="True">
+									<Image Source="C:\Users\VICTUS\source\repos\suckMyBawls\suckMyBawls\Assets\pancake.jpg"
+										   Stretch="UniformToFill"
+										   Width="185" Height="120"/>
+								</Border>
+								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+									<TextBlock Text="Chocolate Pancakes" VerticalAlignment="Top"/>
+									<!-- skibidi con estilos propios -->
+									<TextBlock Text="Una pizza clásica con salsa de tomate, mozzarella fresca y albahaca. Ideal para los amantes del sabor tradicional italiano."
+											   FontSize="16"
+											   FontWeight="Normal"
+											   Foreground="Gray"
+											   TextWrapping="Wrap"
+											   MaxWidth="323"
+											   TextAlignment="Justify"
+											   VerticalAlignment="Top"/>
+								</StackPanel>
+							</StackPanel>
+						</Button>
+					</Grid>
+					<Grid Grid.Row="2">
+
+						<Button Name="PomodoroButton" Tag="Plato6Popup" Click="OnDishClick">
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+								<Border CornerRadius="30" ClipToBounds="True">
+									<Image Source="/Assets/pomo.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+								</Border>
+								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+									<TextBlock Text="Pasta Pomodoro" VerticalAlignment="Top"/>
+									<TextBlock Text="Pasta al dente con salsa de tomate natural y albahaca fresca."
+											   FontSize="16" FontWeight="Normal" Foreground="Gray" TextWrapping="Wrap" MaxWidth="323"
+											   TextAlignment="Justify" VerticalAlignment="Top"/>
+								</StackPanel>
+							</StackPanel>
+						</Button>
+						<Popup Name="Plato6Popup" PlacementMode="Bottom" IsLightDismissEnabled="True">
+							<Border Name="Plato6PopupBorder" Background="#F2F2F2" Width="500" Height="150"
+									BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+									RenderTransformOrigin="0.5,0">
+								<Border.RenderTransform>
+									<TranslateTransform Y="-100"/>
+								</Border.RenderTransform>
+								<Grid>
+									<TextBlock Text="Más info de la pasta aquí" Margin="0,0,0,40"/>
+									<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+								</Grid>
+							</Border>
+						</Popup>
+						
+					</Grid>
+					<Grid Grid.Row="3">
+
+						<Button Name="StirButton" Tag="Plato7Popup" Click="OnDishClick">
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+								<Border CornerRadius="30" ClipToBounds="True">
+									<Image Source="/Assets/stri.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+								</Border>
+								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+									<TextBlock Text="Vegetable Stir Fry" VerticalAlignment="Top"/>
+									<TextBlock Text="Vegetales frescos salteados en salsa de soja con jengibre."
+											   FontSize="16" FontWeight="Normal" Foreground="Gray" TextWrapping="Wrap" MaxWidth="323"
+											   TextAlignment="Justify" VerticalAlignment="Top"/>
+								</StackPanel>
+							</StackPanel>
+						</Button>
+						<Popup Name="Plato7Popup" PlacementMode="Bottom" IsLightDismissEnabled="True">
+							<Border Name="Plato7PopupBorder" Background="#F2F2F2" Width="500" Height="150"
+									BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+									RenderTransformOrigin="0.5,0">
+								<Border.RenderTransform>
+									<TranslateTransform Y="-100"/>
+								</Border.RenderTransform>
+								<Grid>
+									<TextBlock Text="Más info del stir fry aquí" Margin="0,0,0,40"/>
+									<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+								</Grid>
+							</Border>
+						</Popup>
+						
+					</Grid>
+					
+					<Grid Grid.Row="4">
+
+						<Button Name="StrogoButton" Tag="Plato8Popup" Click="OnDishClick">
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+								<Border CornerRadius="30" ClipToBounds="True">
+									<Image Source="/Assets/strogo.jpg" Width="185" Height="120" Stretch="UniformToFill"/>
+								</Border>
+								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+									<TextBlock Text="Beef Stroganoff" VerticalAlignment="Top"/>
+									<TextBlock Text="Carne de res en salsa cremosa con champiñones sobre fideos."
+											   FontSize="16" FontWeight="Normal" Foreground="Gray" TextWrapping="Wrap" MaxWidth="323"
+											   TextAlignment="Justify" VerticalAlignment="Top"/>
+								</StackPanel>
+							</StackPanel>
+						</Button>
+						<Popup Name="Plato8Popup" PlacementMode="Top" IsLightDismissEnabled="True">
+							<Border Name="Plato8PopupBorder" Background="#F2F2F2" Width="500" Height="150"
+									BorderBrush="#EBEBEB" BorderThickness="5" CornerRadius="10" Padding="10"
+									RenderTransformOrigin="0.5,0">
+								<Border.RenderTransform>
+									<TranslateTransform Y="100"/>
+								</Border.RenderTransform>
+								<Grid>
+									<TextBlock Text="Más info del stroganoff aquí" Margin="0,0,0,40"/>
+									<Button Content="ADD TO ORDER" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+								</Grid>
+							</Border>
+						</Popup>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+	</Grid>
+
+</Window>
