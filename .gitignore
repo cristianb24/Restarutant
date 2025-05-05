@@ -1,0 +1,59 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+*.vscode/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.log
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Rider
+.idea/
+
+# Microsoft Azure
+*.azurePubxml
+*.azurePubxml.user
+PublishProfiles/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# ASP.NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# TFS
+$tf/
+
+# Rider
+.idea/
+
+# JetBrains
+*.sln.iml
+
+# Local history
+.localhistory/
+
+# Others
+*.vsidx
+*.dbmdl
+*.bak
