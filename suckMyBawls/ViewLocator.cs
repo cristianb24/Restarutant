@@ -29,4 +29,5 @@ namespace suckMyBawls
             return data is ViewModelBase;
         }
     }
+
 }
